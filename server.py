@@ -1,5 +1,7 @@
 #  coding: utf-8 
 import SocketServer
+import mimetypes
+import os
 
 # Copyright 2013 Abram Hindle, Eddie Antonio Santos
 # 
@@ -28,11 +30,46 @@ import SocketServer
 
 
 class MyWebServer(SocketServer.BaseRequestHandler):
-    
+    def create_response(self, order):
+        if order == 'Ok':
+            if os.path.isdir(self.path):
+                self.path += 'index.html'
+            file = open(self.path, "r")
+            filetype, encoding = mimetypes.guess_type(self.path)
+            response = "HTTP/1.1 200 OK\r\nContent-Type: " + filetype + "\r\n\r\n" + file.read()
+            file.close()
+            #print mimetypes.guess_type(response)
+            return response
+        elif order == 'Bad Path':
+            response = "HTTP/1.1 404 Not Found\r\n\r\n"
+            return response
+        else:
+            response = "HTTP/1.1 405 Method Not Allowed\r\n\r\n"
+            return response
+
+    def evaluate_path(self,path):
+        base_path = os.getcwd() + '/www'
+        self.path = base_path + path
+        #print self.path
+        if '/../' in self.path:
+            return 'Bad Path'
+        elif os.path.exists(self.path):
+            return 'Ok'
+        else:
+            return 'Bad Path'
+
     def handle(self):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
-        self.request.sendall("OK")
+        request = self.data.split()
+        http_method = request[0]
+        if http_method == 'GET':
+            conclusion = self.evaluate_path(request[1])
+        else:
+            conclusion = 'Wrong Method'
+        #print conclusion
+        response = self.create_response(conclusion)
+        self.request.sendall(response)
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
