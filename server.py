@@ -31,6 +31,10 @@ import os
 # to test: bash runner.sh
 
 class MyWebServer(SocketServer.BaseRequestHandler):
+
+    """
+    This function's purpose is to form the response that will be sent to whoever made the request.
+    """
     def create_response(self, order):
         if order == 'Ok':
             if os.path.isdir(self.path):
@@ -48,6 +52,9 @@ class MyWebServer(SocketServer.BaseRequestHandler):
             response = "HTTP/1.1 405 Method Not Allowed\r\n\r\n"
             return response
 
+    '''
+    This function's purpose is verify that the path of the request makes sense and is legitimate.
+    '''
     def evaluate_path(self,path):
         base_path = os.getcwd() + '/www'
         self.path = base_path + path
@@ -59,6 +66,9 @@ class MyWebServer(SocketServer.BaseRequestHandler):
         else:
             return 'Bad Path'
 
+    '''
+    This function's purpose is to handle any request made of the web server and then send the response.
+    '''
     def handle(self):
         self.data = self.request.recv(1024).strip()
         print ("Got a request of: %s\n" % self.data)
