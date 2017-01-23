@@ -19,11 +19,12 @@ import os
 #
 #
 # Furthermore it is derived from the Python documentation examples thus
-# some of the code is Copyright © 2001-2013 Python Software
+# some of the code is Copyright © 2001-2016 Python Software
 # Foundation; All Rights Reserved
 #
 # http://docs.python.org/2/library/socketserver.html
 #
+
 # run: python freetests.py
 
 # try: curl -v -X GET http://127.0.0.1:8080/
