@@ -3,7 +3,7 @@ import SocketServer
 import mimetypes
 import os
 
-# Copyright 2013 Abram Hindle, Eddie Antonio Santos
+# Copyright 2017 Abram Hindle, Eddie Antonio Santos, J Maxwell Douglas
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import os
 
 # try: curl -v -X GET http://127.0.0.1:8080/
 
+# to test: bash runner.sh
 
 class MyWebServer(SocketServer.BaseRequestHandler):
     def create_response(self, order):
